@@ -72,6 +72,7 @@ export function renderFoodLog() {
         allLogs[dateKey] = [];
         localStorage.setItem("foodLog", JSON.stringify(allLogs));
         renderFoodLog();
+        renderWeeklyStats();
         showToast("Today's log cleared");
       });
     };
@@ -142,6 +143,7 @@ export function deleteLogItem(index) {
     allLogs[dateKey].splice(index, 1);
     localStorage.setItem("foodLog", JSON.stringify(allLogs));
     renderFoodLog();
+    renderWeeklyStats();
     showToast("Item removed");
   }
 }
@@ -160,6 +162,7 @@ export function logMealOrProduct(item) {
   localStorage.setItem("foodLog", JSON.stringify(allLogs));
 
   renderFoodLog();
+  renderWeeklyStats();
   showSuccessModal(item);
 }
 
@@ -180,7 +183,9 @@ export function renderWeeklyStats() {
     const d = new Date(today);
     d.setDate(today.getDate() - i);
 
-    const key = d.toISOString().split('T')[0];
+    const offset = d.getTimezoneOffset();
+    const localDate = new Date(d.getTime() - (offset * 60 * 1000));
+    const key = localDate.toISOString().split('T')[0];
 
     const dayLogs = logs[key] || [];
 

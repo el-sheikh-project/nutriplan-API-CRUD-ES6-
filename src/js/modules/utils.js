@@ -1,7 +1,9 @@
 
 export function getTodayDateKey() {
   const today = new Date();
-  return today.toISOString().split("T")[0];
+  const offset = today.getTimezoneOffset();
+  const localDate = new Date(today.getTime() - (offset * 60 * 1000));
+  return localDate.toISOString().split("T")[0];
 }
 
 export function showToast(message) {
